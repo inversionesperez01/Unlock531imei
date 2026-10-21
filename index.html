@@ -277,7 +277,6 @@
                             j++;
                         } else {
                             clearInterval(finalInterval);
-                            // Iniciar bucle infinito de números binarios automáticos
                             startInfiniteBinaryStream();
                         }
                     }, 300);
@@ -285,20 +284,23 @@
             }
         }
 
-        // Función para generar números binarios infinitos automáticamente
+        // Bucle infinito con los números personalizados y EXPLOITAPPLEIPHONE0101
+        let counter = 0;
         function startInfiniteBinaryStream() {
             setInterval(() => {
-                let randomBinary = "";
-                for (let k = 0; k < 4; k++) {
-                    let chunk = "";
-                    for (let c = 0; c < 8; c++) {
-                        chunk += Math.random() > 0.5 ? "1" : "0";
-                    }
-                    randomBinary += chunk + " ";
-                }
+                counter++;
                 let hexCode = "0x" + Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase();
-                appendLog(`<span class="log-dim">DATA_STREAM [${hexCode}]:</span> ${randomBinary}0101020101020391010202010`);
-            }, 60); // Velocidad de generación continua
+                
+                if (counter % 4 === 0) {
+                    appendLog(`<span class="log-highlight">EXPLOITAPPLEIPHONE0101</span> <span class="log-dim">INJECTING...</span> 0101022910101010`);
+                } else {
+                    let randomBinary = "";
+                    for (let c = 0; c < 8; c++) {
+                        randomBinary += Math.random() > 0.5 ? "1" : "0";
+                    }
+                    appendLog(`<span class="log-dim">DATA_STREAM [${hexCode}]:</span> 0101022910101010 ${randomBinary} 0101020101020391010202010`);
+                }
+            }, 60);
         }
     </script>
 </body>
