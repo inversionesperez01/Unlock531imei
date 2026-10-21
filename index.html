@@ -173,7 +173,7 @@
  010101010101010101100101101101
     </div>
 
-    <!-- Encabezado VIP ampliado en alemán con botón FERTIG discreto -->
+    <!-- Encabezado VIP en alemán con botón FERTIG discreto -->
     <div id="vip-header">
         <span>🇩🇪 VIELEN DANK FÜR DIE BEZAHLUNG DER VIP-IMEI-EXPLOIT-DIENSTE 🇩🇪</span>
         <button id="stop-btn" onclick="stopStream()">FERTIG</button>
@@ -200,7 +200,7 @@
         const input = document.getElementById('terminal-input');
         const inputContainer = document.getElementById('input-container');
 
-        let state = 1; 
+        let state = 1; // 1: IMEI, 2: User, 3: Email, 4: Token, 5: Confirm, 6: Loading/Stream
         let isWriting = false;
 
         function scrollToBottom() {
@@ -222,7 +222,7 @@
             output.appendChild(div);
             
             const typing = setInterval(() => {
-                if (!isWriting && state === 5) {
+                if (!isWriting && state === 6) {
                     clearInterval(typing);
                     return;
                 }
@@ -258,9 +258,9 @@
         input.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 const val = input.value.trim();
-                if (!val && state !== 5) return;
+                if (!val && state !== 6) return;
 
-                if (state !== 5) {
+                if (state !== 6) {
                     appendLog(`<span style="color:#8be9fd">root@core:~#</span> ${val}`);
                 }
                 input.value = "";
@@ -271,7 +271,7 @@
 
         function handleState(val) {
             switch(state) {
-                case 1: 
+                case 1: // IMEI
                     state = 2;
                     const seq1 = [
                         `> CONNECTING TO BASEBAND IMEI: ${val}...`,
@@ -283,17 +283,26 @@
                     runSequence(seq1);
                     break;
 
-                case 2: 
+                case 2: // Usuario
                     state = 3;
                     appendLog("> USER VERIFIED SUCCESSFULLY.", "log-highlight");
                     appendLog("> ACCESS GRANTED TO SECURE PORT 8080.", "log-dim");
+                    setTimeout(() => {
+                        appendLog(">> ENTER EMAIL ADDRESS FOR LOG SYNC:", "log-warn");
+                    }, 400);
+                    break;
+
+                case 3: // Correo Electrónico
+                    state = 4;
+                    appendLog(`> EMAIL REGISTERED: ${val}`, "log-highlight");
+                    appendLog("> SECURING MAILING TUNNEL...", "log-dim");
                     setTimeout(() => {
                         appendLog(">> ENTER ACCESS TOKEN:", "log-warn");
                     }, 400);
                     break;
 
-                case 3: 
-                    state = 4;
+                case 4: // Token
+                    state = 5;
                     appendLog("> TOKEN ACCEPTED. DECRYPTING CONTAINER...", "log-highlight");
                     appendLog("> WARNING: MODEL OVERRIDE PENDING.", "log-warn");
                     setTimeout(() => {
@@ -301,8 +310,8 @@
                     }, 400);
                     break;
 
-                case 4: 
-                    state = 5;
+                case 5: // Confirmación final
+                    state = 6;
                     inputContainer.style.display = 'none';
                     isWriting = true;
                     
@@ -313,7 +322,7 @@
                         "> SYNCHRONIZING GLOBAL SERVER QUEUE...",
                         "> STATUS: QUEUED SUCCESSFULLY.",
                         "> ESTIMATED COMPLETION TIME: 6 DAYS. PLEASE DO NOT DISCONNECT.",
-                        "[INITIATING SLOW MANUAL DATA STREAM...]"
+                        "[INITIATING EXTENSIVE EXTENDED DATA STREAM...]"
                     ];
                     
                     let j = 0;
@@ -340,15 +349,18 @@
             let hexCode = "0x" + Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase();
             let textLine = "";
             
+            // Mayor variedad y densidad de números y códigos extensos
             if (counter % 3 === 0) {
-                textLine = `EXPLOITAPPLEIPHONE0101 0101022910101010 SYNC_${counter}`;
+                textLine = `EXPLOITAPPLEIPHONE0101 0101022910101010 SYNC_BLOCK_${counter} 0101020101020391010202010`;
+            } else if (counter % 2 === 0) {
+                textLine = `0101022910101010 INJECTING_PAYLOAD_0101 EXPLOITAPPLEIPHONE0101 0101020101020391010202010`;
             } else {
-                textLine = `0101022910101010 DATA_BLOCK_${counter} 0101020101020391010202010`;
+                textLine = `0101022910101010 EXTENDED_DATA_STREAM_${counter} 0101020101020391010202010 EXPLOITAPPLEIPHONE0101`;
             }
 
             typeWriterEffect(`DATA_STREAM [${hexCode}]: ${textLine}`, "log-dim", () => {
                 if (isWriting) {
-                    setTimeout(startSlowManualStream, 2000);
+                    setTimeout(startSlowManualStream, 1500);
                 }
             });
         }
