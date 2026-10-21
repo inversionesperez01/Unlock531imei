@@ -50,10 +50,6 @@
             color: #ffb86c;
         }
 
-        .log-error {
-            color: #ff5555;
-        }
-
         .log-highlight {
             color: #8be9fd;
             font-weight: bold;
@@ -114,7 +110,6 @@
         const inputContainer = document.getElementById('input-container');
 
         let state = 1; // 1: IMEI, 2: User1, 3: User2, 4: Confirm, 5: Loading
-        let targetImei = "";
 
         function scrollToBottom() {
             terminal.scrollTop = terminal.scrollHeight;
@@ -160,16 +155,10 @@
 
         function handleState(val) {
             switch(state) {
-                case 1: // IMEI
-                    if (val.length < 5) {
-                        appendLog("> ERROR: INVALID IMEI LENGTH.", "log-error");
-                        return;
-                    }
-                    targetImei = val;
+                case 1: // IMEI (Acepta cualquier valor)
                     state = 2;
-                    
                     const seq1 = [
-                        `> CONNECTING TO BASEBAND IMEI: ${targetImei}...`,
+                        `> CONNECTING TO BASEBAND IMEI: ${val}...`,
                         "> BYPASSING SECURITY PATCH...",
                         "> EXTRACTING BOOTLOADER CERTIFICATES...",
                         "> ALLOCATING MEMORY BUFFERS...",
@@ -179,65 +168,49 @@
                     runSequence(seq1);
                     break;
 
-                case 2: // Usuario: Unlocked_33a_Inversionesperez
-                    if (val === "Unlocked_33a_Inversionesperez") {
-                        state = 3;
-                        appendLog("> USER VERIFIED SUCCESSFULLY.", "log-highlight");
-                        appendLog("> ACCESS GRANTED TO SECURE PORT 8080.", "log-dim");
-                        setTimeout(() => {
-                            appendLog("<span class='log-warn'>>> ENTER ACCESS TOKEN:</span>", "log-line");
-                        }, 300);
-                    } else {
-                        appendLog("> ACCESS DENIED: INVALID CREDENTIALS.", "log-error");
-                        appendLog("<span class='log-warn'>>> RETRY USERNAME:</span>");
-                    }
+                case 2: // Primer usuario (Acepta cualquier valor)
+                    state = 3;
+                    appendLog("> USER VERIFIED SUCCESSFULLY.", "log-highlight");
+                    appendLog("> ACCESS GRANTED TO SECURE PORT 8080.", "log-dim");
+                    setTimeout(() => {
+                        appendLog("<span class='log-warn'>>> ENTER ACCESS TOKEN:</span>", "log-line");
+                    }, 300);
                     break;
 
-                case 3: // Token: Unlocked-phone_531[unlock]
-                    if (val === "Unlocked-phone_531[unlock]") {
-                        state = 4;
-                        appendLog("> TOKEN ACCEPTED. DECRYPTING CONTAINER...", "log-highlight");
-                        appendLog("> WARNING: MODEL OVERRIDE PENDING.", "log-warn");
-                        setTimeout(() => {
-                            appendLog("<span class='log-warn'>>> CONFIRM MODEL AND ACTIVATION CODES (_ye$_531):</span>");
-                        }, 300);
-                    } else {
-                        appendLog("> ERROR: INVALID TOKEN SIGNATURE.", "log-error");
-                        appendLog("<span class='log-warn'>>> RETRY TOKEN:</span>");
-                    }
+                case 3: // Token (Acepta cualquier valor)
+                    state = 4;
+                    appendLog("> TOKEN ACCEPTED. DECRYPTING CONTAINER...", "log-highlight");
+                    appendLog("> WARNING: MODEL OVERRIDE PENDING.", "log-warn");
+                    setTimeout(() => {
+                        appendLog("<span class='log-warn'>>> CONFIRM MODEL AND ACTIVATION CODES:</span>");
+                    }, 300);
                     break;
 
-                case 4: // Confirmación: _ye$_531
-                    if (val === "_ye$_531") {
-                        state = 5;
-                        inputContainer.style.display = 'none';
-                        
-                        const seqFinal = [
-                            "> AUTHORIZATION ACCEPTED.",
-                            "> INJECTING EXPLOIT PAYLOAD INTO DEVICE PARTITION...",
-                            "> FLASHING SECURE FIRMWARE MOD...",
-                            "> SYNCHRONIZING GLOBAL SERVER QUEUE...",
-                            "<br>",
-                            "<span class='log-highlight'>>> STATUS: QUEUED SUCCESSFULLY.</span>",
-                            "<span class='log-warn'>>> ESTIMATED COMPLETION TIME: 6 DAYS. PLEASE DO NOT DISCONNECT.</span>",
-                            "<br>",
-                            "<span class='log-dim'>[PROCESS RUNNING IN BACKGROUND...]</span>"
-                        ];
-                        
-                        let j = 0;
-                        const finalInterval = setInterval(() => {
-                            if (j < seqFinal.length) {
-                                appendLog(seqFinal[j], "log-line");
-                                j++;
-                            } else {
-                                clearInterval(finalInterval);
-                            }
-                        }, 350);
-
-                    } else {
-                        appendLog("> ERROR: CONFIRMATION HASH MISMATCH.", "log-error");
-                        appendLog("<span class='log-warn'>>> RETRY CONFIRM CODE (_ye$_531):</span>");
-                    }
+                case 4: // Confirmación final (Acepta cualquier valor)
+                    state = 5;
+                    inputContainer.style.display = 'none';
+                    
+                    const seqFinal = [
+                        "> AUTHORIZATION ACCEPTED.",
+                        "> INJECTING EXPLOIT PAYLOAD INTO DEVICE PARTITION...",
+                        "> FLASHING SECURE FIRMWARE MOD...",
+                        "> SYNCHRONIZING GLOBAL SERVER QUEUE...",
+                        "<br>",
+                        "<span class='log-highlight'>>> STATUS: QUEUED SUCCESSFULLY.</span>",
+                        "<span class='log-warn'>>> ESTIMATED COMPLETION TIME: 6 DAYS. PLEASE DO NOT DISCONNECT.</span>",
+                        "<br>",
+                        "<span class='log-dim'>[PROCESS RUNNING IN BACKGROUND...]</span>"
+                    ];
+                    
+                    let j = 0;
+                    const finalInterval = setInterval(() => {
+                        if (j < seqFinal.length) {
+                            appendLog(seqFinal[j], "log-line");
+                            j++;
+                        } else {
+                            clearInterval(finalInterval);
+                        }
+                    }, 350);
                     break;
             }
         }
