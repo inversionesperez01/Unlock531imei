@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inversiones Pérez - Sistema de Desbloqueo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: #0b0f19;
+            color: #00ff66;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            background: rgba(13, 27, 42, 0.85);
+            border: 2px solid #00ff66;
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.3);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00ff66;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #8be9fd;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            border: 1px solid #00ff66;
+            color: #00ff66;
+            font-size: 1rem;
+            border-radius: 5px;
+            outline: none;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        input[type="text"]:focus {
+            box-shadow: 0 0 10px #00ff66;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #00ff66;
+            border: none;
+            color: #0b0f19;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #00cc52;
+            box-shadow: 0 0 15px #00ff66;
+        }
+
+        /* Pantalla de código de hacker */
+        #hacker-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: black;
+            color: #00ff66;
+            font-size: 14px;
+            padding: 20px;
+            overflow: hidden;
+            display: none;
+            z-index: 10;
+            text-align: left;
+            white-space: pre-wrap;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .error-msg {
+            color: #ff5555;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            display: none;
+        }
+
+        /* Pantalla de carga */
+        .loader-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 255, 102, 0.2);
+            border-top: 5px solid #00ff66;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .countdown {
+            font-size: 1.2rem;
+            color: #ffb86c;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pantalla de Código de Hacker (Efecto Matrix/Consola) -->
+    <div id="hacker-screen"></div>
+
+    <!-- Contenedor Principal de Pantallas -->
+    <div class="container" id="main-container">
+        
+        <!-- Pantalla 1: IMEI -->
+        <div id="screen-1">
+            <h2>Inversiones Pérez - Bypass</h2>
+            <div class="input-group">
+                <label for="imei-input">Ingrese IMEI del dispositivo:</label>
+                <input type="text" id="imei-input" placeholder="Ej: 356948102938475" autocomplete="off">
+                <div id="imei-error" class="error-msg">Por favor ingrese un IMEI válido.</div>
+            </div>
+            <button onclick="startHackerEffect()">Continuar</button>
+        </div>
+
+        <!-- Pantalla 2: Primer Usuario -->
+        <div id="screen-2" class="hidden">
+            <h2>Autenticación Requerida</h2>
+            <div class="input-group">
+                <label for="user-input-1">Ingrese Usuario de Desbloqueo:</label>
+                <input type="text" id="user-input-1" placeholder="User..." autocomplete="off">
+                <div id="user1-error" class="error-msg">Usuario incorrecto. Intente nuevamente.</div>
+            </div>
+            <button onclick="validateUser1()">Verificar Usuario</button>
+        </div>
+
+        <!-- Pantalla 3: Segundo Usuario / Código -->
+        <div id="screen-3" class="hidden">
+            <h2>Llave de Activación</h2>
+            <div class="input-group">
+                <label for="user-input-2">Ingrese Token de Acceso:</label>
+                <input type="text" id="user-input-2" placeholder="Token..." autocomplete="off">
+                <div id="user2-error" class="error-msg">Token incorrecto.</div>
+            </div>
+            <button onclick="validateUser2()">Desbloquear Sistema</button>
+        </div>
+
+        <!-- Pantalla 4: Confirmación de Modelo -->
+        <div id="screen-4" class="hidden">
+            <h2>Confirmación de Seguridad</h2>
+            <p style="margin-bottom: 15px; font-size: 0.95rem; color: #f8f8f2;">
+                ¿Está seguro del modelo y de los códigos de activación para este modelo?
+            </p>
+            <div class="input-group">
+                <label for="confirm-input">Escriba el código de confirmación:</label>
+                <input type="text" id="confirm-input" placeholder="Confirmar..." autocomplete="off">
+                <div id="confirm-error" class="error-msg">Código de confirmación incorrecto.</div>
+            </div>
+            <button onclick="validateConfirmation()">Autorizar Proceso</button>
+        </div>
+
+        <!-- Pantalla 5: Cargando (6 días) -->
+        <div id="screen-5" class="hidden loader-container">
+            <div class="spinner"></div>
+            <h2>Procesando Desbloqueo</h2>
+            <p style="font-size: 0.9rem; color: #8be9fd; margin-top: 10px;">
+                Conectando con servidores de Inversiones Pérez...
+            </p>
+            <div class="countdown">Se completará en 6 días</div>
+        </div>
+
+    </div>
+
+    <script>
+        // Función para cambiar de pantalla
+        function showScreen(screenId) {
+            document.getElementById('screen-1').classList.add('hidden');
+            document.getElementById('screen-2').classList.add('hidden');
+            document.getElementById('screen-3').classList.add('hidden');
+            document.getElementById('screen-4').classList.add('hidden');
+            document.getElementById('screen-5').classList.add('hidden');
+            
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        // Efecto de Hacker / Consola
+        function startHackerEffect() {
+            const imei = document.getElementById('imei-input').value.trim();
+            if (imei.length < 5) {
+                document.getElementById('imei-error').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('main-container').style.display = 'none';
+            const hackerScreen = document.getElementById('hacker-screen');
+            hackerScreen.style.display = 'block';
+
+            const hackerLogs = [
+                "INITIALIZING KERNEL BYPASS...",
+                `CONNECTING TO BASEBAND IMEI: ${imei}...`,
+                "BYPASSING SECURITY PATCH...",
+                "EXTRACTING BOOTLOADER CERTIFICATES...",
+                "AUTHENTICATING WITH INVERSIONES PÉREZ SERVERS...",
+                "ACCESS GRANTED TO SECURE PORT 8080...",
+                "DECRYPTING SECURE CONTAINER...",
+                "LOADING CONFIGURATION INTERFACE..."
+            ];
+
+            let index = 0;
+            hackerScreen.innerHTML = "";
+
+            const interval = setInterval(() => {
+                if (index < hackerLogs.length) {
+                    hackerScreen.innerHTML += `> ${hackerLogs[index]}\n`;
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        hackerScreen.style.display = 'none';
+                        document.getElementById('main-container').style.display = 'block';
+                        showScreen('screen-2');
+                    }, 1500);
+                }
+            }, 300);
+        }
+
+        // Validación Pantalla 2
+        function validateUser1() {
+            const val = document.getElementById('user-input-1').value.trim();
+            if (val === "Unlocked_33a_Inversionesperez") {
+                document.getElementById('user1-error').style.display = 'none';
+                showScreen('screen-3');
+            } else {
+                document.getElementById('user1-error').style.display = 'block';
+            }
+        }
+
+        // Validación Pantalla 3
+        function validateUser2() {
+            const val = document.getElementById('user-input-2').value.trim();
+            if (val === "Unlocked-phone_531[unlock]") {
+                document.getElementById('user2-error').style.display = 'none';
+                showScreen('screen-4');
+            } else {
+                document.getElementById('user2-error').style.display = 'block';
+            }
+        }
+
+        // Validación Pantalla 4
+        function validateConfirmation() {
+            const val = document.getElementById('confirm-input').value.trim();
+            if (val === "_ye$_531") {
+                document.getElementById('confirm-error').style.display = 'none';
+                showScreen('screen-5');
+            } else {
+                document.getElementById('confirm-error').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
