@@ -43,7 +43,7 @@
             white-space: pre;
         }
 
-        /* Encabezado VIP superior con letras grandes y resaltadas */
+        /* Encabezado VIP superior */
         #vip-header {
             position: fixed;
             top: 0;
@@ -199,7 +199,7 @@
         const inputContainer = document.getElementById('input-container');
 
         let state = 1; 
-        let streamInterval = null;
+        let isWriting = false;
 
         function scrollToBottom() {
             terminal.scrollTop = terminal.scrollHeight;
@@ -213,7 +213,7 @@
             scrollToBottom();
         }
 
-        // Efecto de escritura tipo máquina de escribir (letra por letra)
+        // Efecto máquina de escribir ultra realista y lento
         function typeWriterEffect(text, className, callback) {
             let i = 0;
             const div = document.createElement('div');
@@ -221,6 +221,10 @@
             output.appendChild(div);
             
             const typing = setInterval(() => {
+                if (!isWriting && state === 5) {
+                    clearInterval(typing);
+                    return;
+                }
                 if (i < text.length) {
                     div.innerHTML += text.charAt(i);
                     i++;
@@ -229,7 +233,7 @@
                     clearInterval(typing);
                     if (callback) callback();
                 }
-            }, 35); // Velocidad moderada para que se alcance a leer y detener con calma
+            }, 65); // Velocidad más lenta y pausada por letra
         }
 
         function runSequence(logs, callback) {
@@ -299,6 +303,7 @@
                 case 4: 
                     state = 5;
                     inputContainer.style.display = 'none';
+                    isWriting = true;
                     
                     const seqFinal = [
                         "> AUTHORIZATION ACCEPTED.",
@@ -307,18 +312,18 @@
                         "> SYNCHRONIZING GLOBAL SERVER QUEUE...",
                         "> STATUS: QUEUED SUCCESSFULLY.",
                         "> ESTIMATED COMPLETION TIME: 6 DAYS. PLEASE DO NOT DISCONNECT.",
-                        "[INITIATING SLOW DATA STREAM...]"
+                        "[INITIATING SLOW MANUAL DATA STREAM...]"
                     ];
                     
                     let j = 0;
                     const nextFinal = () => {
-                        if (j < seqFinal.length) {
+                        if (j < seqFinal.length && isWriting) {
                             typeWriterEffect(seqFinal[j], "log-line", () => {
                                 j++;
                                 nextFinal();
                             });
-                        } else {
-                            startSlowBinaryStream();
+                        } else if (isWriting) {
+                            startSlowManualStream();
                         }
                     };
                     nextFinal();
@@ -326,30 +331,33 @@
             }
         }
 
-        // Generador lento de códigos con los elementos pedidos y botón de parada
+        // Generador de líneas lentas letra por letra con pausa larga entre líneas
         let counter = 0;
-        function startSlowBinaryStream() {
-            streamInterval = setInterval(() => {
-                counter++;
-                let hexCode = "0x" + Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase();
-                let lineText = "";
-                
-                if (counter % 3 === 0) {
-                    lineText = "EXPLOITAPPLEIPHONE0101 0101022910101010 SYNC_OK";
-                } else {
-                    lineText = `0101022910101010 DATA_BLOCK_${counter} 0101020101020391010202010`;
-                }
+        function startSlowManualStream() {
+            if (!isWriting) return;
+            
+            counter++;
+            let hexCode = "0x" + Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase();
+            let textLine = "";
+            
+            if (counter % 3 === 0) {
+                textLine = `EXPLOITAPPLEIPHONE0101 0101022910101010 SYNC_${counter}`;
+            } else {
+                textLine = `0101022910101010 DATA_BLOCK_${counter} 0101020101020391010202010`;
+            }
 
-                typeWriterEffect(`DATA_STREAM [${hexCode}]: ${lineText}`, "log-dim");
-            }, 1200); // Espacio de tiempo de más de 1 segundo entre cada línea para que tengas todo el control de presionar "LISTO"
+            typeWriterEffect(`DATA_STREAM [${hexCode}]: ${textLine}`, "log-dim", () => {
+                // Pausa de 2 segundos antes de escribir la siguiente línea para darte control total
+                if (isWriting) {
+                    setTimeout(startSlowManualStream, 2000);
+                }
+            });
         }
 
-        // Botón para frenar la escritura al instante
+        // Botón para detener la escritura al instante
         function stopStream() {
-            if (streamInterval) {
-                clearInterval(streamInterval);
-                appendLog("\n> [STREAM HALTED BY USER. SYSTEM LOCKED SECURELY.]", "log-highlight");
-            }
+            isWriting = false;
+            appendLog("\n> [STREAM HALTED BY USER. SYSTEM LOCKED SECURELY.]", "log-highlight");
         }
     </script>
 </body>
