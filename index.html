@@ -25,44 +25,45 @@
             position: relative;
         }
 
-        /* Candado gigante de código binario al fondo */
+        /* Candado de hacker grande y centrado en el área seleccionada */
         .binary-lock {
             position: absolute;
-            top: 50%;
+            top: 32%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 14px;
+            font-size: 11px;
             line-height: 1.1;
-            color: rgba(0, 255, 102, 0.12);
+            color: rgba(0, 255, 102, 0.22);
             z-index: 0;
             pointer-events: none;
             text-align: center;
             font-weight: bold;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(0, 255, 102, 0.15);
+            letter-spacing: 1px;
+            text-shadow: 0 0 12px rgba(0, 255, 102, 0.3);
+            white-space: pre;
         }
 
-        /* Estilo de la barra superior VIP */
+        /* Encabezado VIP superior con letras más grandes y resaltadas */
         #vip-header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(0, 20, 10, 0.95);
-            border-bottom: 1px solid #00ff66;
-            padding: 10px 15px;
-            font-size: 11px;
+            background: rgba(0, 20, 10, 0.98);
+            border-bottom: 2px solid #00ff66;
+            padding: 12px 10px;
+            font-size: 13px;
             text-align: center;
             z-index: 100;
-            box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
-            color: #ffb86c;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
+            color: #ffcc00;
             font-weight: bold;
             letter-spacing: 1px;
         }
 
         #terminal {
             width: 100%;
-            height: calc(100vh - 50px);
+            height: calc(100vh - 60px);
             overflow-y: auto;
             white-space: pre-wrap;
             word-wrap: break-word;
@@ -125,23 +126,25 @@
 </head>
 <body>
 
-    <!-- Candado gigante de código binario en el fondo -->
+    <!-- Candado de código binario mejorado y centrado exactamente en el área indicada -->
     <div class="binary-lock">
-        01101100 01000010 01111001<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;████████████&nbsp;&nbsp;&nbsp;&nbsp;<br>
-        &nbsp;&nbsp;██░░░░░░░░░░░░██&nbsp;&nbsp;<br>
-        &nbsp;&nbsp;██░░████████░░██&nbsp;&nbsp;<br>
-        &nbsp;&nbsp;██░░██&nbsp;&nbsp;&nbsp;&nbsp;██░░██&nbsp;&nbsp;<br>
-        &nbsp;&nbsp;████████████████&nbsp;&nbsp;<br>
-        &nbsp;██░░░░░░░░░░░░░░██&nbsp;<br>
-        &nbsp;██░░0110100101░░██&nbsp;<br>
-        &nbsp;██░░1011001100░░██&nbsp;<br>
-        &nbsp;██░░░░0101101100░░██&nbsp;<br>
-        &nbsp;&nbsp;████████████████&nbsp;&nbsp;<br>
-        10110011 01101101 10101011
+ 01101100 01000010 01111001 10101011 01101101
+      [ __________________ ]
+     /                    \
+    |      0101101010      |
+    |    01101[LOCK]0101   |
+    |   |                |   |
+    |   |   ██████████   |   |
+    |   |   ██      ██   |   |
+    |   |   ██████████   |   |
+    |   |                |   |
+    |   \________________/   |
+     \                      /
+      \____________________/
+     010010110011 01101101
     </div>
 
-    <!-- Encabezado VIP -->
+    <!-- Encabezado VIP ampliado -->
     <div id="vip-header">
         🇩🇪🇩🇪 VIELEN DANK FÜR DIE BEZAHLUNG DER VIP-IMEI-EXPLOIT-DIENSTE 🇩🇪🇩🇪
     </div>
