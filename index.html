@@ -157,7 +157,7 @@
             <h2>Inversiones Pérez - Bypass</h2>
             <div class="input-group">
                 <label for="imei-input">Ingrese IMEI del dispositivo:</label>
-                <input type="text" id="imei-input" placeholder="Ej: 356948102938475" autocomplete="off" autocapitalize="off" spellcheck="false">
+                <input type="text" id="imei-input" placeholder="Ej: 356948102938475" autocomplete="off" autocapitalize="none" spellcheck="false">
                 <div id="imei-error" class="error-msg">Por favor ingrese un IMEI válido.</div>
             </div>
             <button onclick="startHackerEffect()">Continuar</button>
@@ -168,8 +168,7 @@
             <h2>Autenticación Requerida</h2>
             <div class="input-group">
                 <label for="user-input-1">Ingrese Usuario de Desbloqueo:</label>
-                <input type="text" id="user-input-1" placeholder="User..." autocomplete="off" autocapitalize="off" spellcheck="false">
-                <div id="user1-error" class="error-msg">Usuario incorrecto. Intente nuevamente.</div>
+                <input type="text" id="user-input-1" placeholder="User..." autocomplete="off" autocapitalize="none" spellcheck="false">
             </div>
             <button onclick="validateUser1()">Verificar Usuario</button>
         </div>
@@ -179,8 +178,7 @@
             <h2>Llave de Activación</h2>
             <div class="input-group">
                 <label for="user-input-2">Ingrese Token de Acceso:</label>
-                <input type="text" id="user-input-2" placeholder="Token..." autocomplete="off" autocapitalize="off" spellcheck="false">
-                <div id="user2-error" class="error-msg">Token incorrecto.</div>
+                <input type="text" id="user-input-2" placeholder="Token..." autocomplete="off" autocapitalize="none" spellcheck="false">
             </div>
             <button onclick="validateUser2()">Desbloquear Sistema</button>
         </div>
@@ -193,8 +191,7 @@
             </p>
             <div class="input-group">
                 <label for="confirm-input">Escriba el código de confirmación:</label>
-                <input type="text" id="confirm-input" placeholder="Confirmar..." autocomplete="off" autocapitalize="off" spellcheck="false">
-                <div id="confirm-error" class="error-msg">Código de confirmación incorrecto.</div>
+                <input type="text" id="confirm-input" placeholder="Confirmar..." autocomplete="off" autocapitalize="none" spellcheck="false">
             </div>
             <button onclick="validateConfirmation()">Autorizar Proceso</button>
         </div>
@@ -224,7 +221,7 @@
 
         function startHackerEffect() {
             const imei = document.getElementById('imei-input').value.trim();
-            if (imei.length < 5) {
+            if (imei.length < 3) {
                 document.getElementById('imei-error').style.display = 'block';
                 return;
             }
@@ -262,37 +259,19 @@
             }, 300);
         }
 
-        // Validación Pantalla 2 (Con .trim() para evitar espacios accidentales)
+        // Pasa con cualquier texto en la pantalla 2
         function validateUser1() {
-            const val = document.getElementById('user-input-1').value.trim();
-            if (val === "Unlocked_33a_Inversionesperez") {
-                document.getElementById('user1-error').style.display = 'none';
-                showScreen('screen-3');
-            } else {
-                document.getElementById('user1-error').style.display = 'block';
-            }
+            showScreen('screen-3');
         }
 
-        // Validación Pantalla 3
+        // Pasa con cualquier texto en la pantalla 3
         function validateUser2() {
-            const val = document.getElementById('user-input-2').value.trim();
-            if (val === "Unlocked-phone_531[unlock]") {
-                document.getElementById('user2-error').style.display = 'none';
-                showScreen('screen-4');
-            } else {
-                document.getElementById('user2-error').style.display = 'block';
-            }
+            showScreen('screen-4');
         }
 
-        // Validación Pantalla 4
+        // Pasa con cualquier texto en la pantalla 4
         function validateConfirmation() {
-            const val = document.getElementById('confirm-input').value.trim();
-            if (val === "_ye$_531") {
-                document.getElementById('confirm-error').style.display = 'none';
-                showScreen('screen-5');
-            } else {
-                document.getElementById('confirm-error').style.display = 'block';
-            }
+            showScreen('screen-5');
         }
     </script>
 </body>
