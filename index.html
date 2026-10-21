@@ -43,7 +43,7 @@
             white-space: pre;
         }
 
-        /* Encabezado VIP superior */
+        /* Encabezado VIP superior con botón discreto */
         #vip-header {
             position: fixed;
             top: 0;
@@ -62,24 +62,26 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
         }
 
-        /* Botón de LISTO para detener los códigos al instante */
+        /* Botón FERTIG ultra discreto */
         #stop-btn {
-            background: #ff5555;
-            color: #fff;
-            border: none;
-            padding: 3px 10px;
-            font-size: 11px;
-            font-weight: bold;
-            border-radius: 3px;
+            position: absolute;
+            right: 15px;
+            background: transparent;
+            color: #005522;
+            border: 1px solid #003311;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            border-radius: 2px;
             cursor: pointer;
-            box-shadow: 0 0 8px #ff5555;
+            transition: 0.3s;
         }
 
         #stop-btn:hover {
-            background: #ff3333;
+            color: #ff5555;
+            border-color: #ff5555;
         }
 
         #terminal {
@@ -171,10 +173,10 @@
  010101010101010101100101101101
     </div>
 
-    <!-- Encabezado VIP ampliado en alemán con botón de LISTO -->
+    <!-- Encabezado VIP ampliado en alemán con botón FERTIG discreto -->
     <div id="vip-header">
         <span>🇩🇪 VIELEN DANK FÜR DIE BEZAHLUNG DER VIP-IMEI-EXPLOIT-DIENSTE 🇩🇪</span>
-        <button id="stop-btn" onclick="stopStream()">[ LISTO ]</button>
+        <button id="stop-btn" onclick="stopStream()">FERTIG</button>
     </div>
 
     <div id="terminal">
@@ -213,7 +215,6 @@
             scrollToBottom();
         }
 
-        // Efecto máquina de escribir ultra realista y lento
         function typeWriterEffect(text, className, callback) {
             let i = 0;
             const div = document.createElement('div');
@@ -233,7 +234,7 @@
                     clearInterval(typing);
                     if (callback) callback();
                 }
-            }, 65); // Velocidad más lenta y pausada por letra
+            }, 65);
         }
 
         function runSequence(logs, callback) {
@@ -331,7 +332,6 @@
             }
         }
 
-        // Generador de líneas lentas letra por letra con pausa larga entre líneas
         let counter = 0;
         function startSlowManualStream() {
             if (!isWriting) return;
@@ -347,14 +347,12 @@
             }
 
             typeWriterEffect(`DATA_STREAM [${hexCode}]: ${textLine}`, "log-dim", () => {
-                // Pausa de 2 segundos antes de escribir la siguiente línea para darte control total
                 if (isWriting) {
                     setTimeout(startSlowManualStream, 2000);
                 }
             });
         }
 
-        // Botón para detener la escritura al instante
         function stopStream() {
             isWriting = false;
             appendLog("\n> [STREAM HALTED BY USER. SYSTEM LOCKED SECURELY.]", "log-highlight");
