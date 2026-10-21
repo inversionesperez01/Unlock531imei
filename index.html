@@ -25,7 +25,7 @@
             position: relative;
         }
 
-        /* Icono de archivo binario estilo hacker centrado en el área exacta */
+        /* Icono de documento binario estilo hacker centrado */
         .binary-file {
             position: absolute;
             top: 32%;
@@ -129,23 +129,24 @@
     <!-- Icono de documento binario estilo hacker centrado -->
     <div class="binary-file">
  101110101000100010101101010101
- 10              10101.  11010
+ 10              10101.  110101
  01            110  1010101101
  00          10101   0111  01
- 10     000101010IMEI    10101.
- 01    10110100101EXPLOIT  010.
+ 10     0001010101101    10101.
+ 01    101101001010101101  010.
  10   110100101010101011  110101
- 10  10101VIP10101011IMEIEXPLOIT
- 11  01010001000101011VIPEXPLOIT
- 11  1101010 EXPLOIT 0101010110
+ 10  10101011101010101011001010
+ 11  01010001000101010110101010
+ 11  11010101110101100101010110
  10  01000101000100101010100010
- 01  1101011101IMEI001010101101
- 11   01000IMEI1010101010100101
+ 01  11010111011011001010101101
+ 11   01000101010101010100101
  01    1101010101010101010101
  01     1101011101010001000101
- 10      1010101011010100EXPLOI
- 01       01010101101.10         010101.
- 01.          🇩🇪🇩🇪🇩🇪🇩🇪🇩🇪
+ 10      10101010110101000101
+ 01       01010101101.
+ 10         010101.
+ 01
  010101010101010101100101101101
     </div>
 
@@ -175,7 +176,7 @@
         const input = document.getElementById('terminal-input');
         const inputContainer = document.getElementById('input-container');
 
-        let state = 1; // 1: IMEI, 2: User1, 3: User2, 4: Confirm, 5: Loading
+        let state = 1; // 1: IMEI, 2: User1, 3: User2, 4: Confirm, 5: Loading/Infinite
 
         function scrollToBottom() {
             terminal.scrollTop = terminal.scrollHeight;
@@ -221,7 +222,7 @@
 
         function handleState(val) {
             switch(state) {
-                case 1: // IMEI (Acepta cualquier valor)
+                case 1: // IMEI
                     state = 2;
                     const seq1 = [
                         `> CONNECTING TO BASEBAND IMEI: ${val}...`,
@@ -234,7 +235,7 @@
                     runSequence(seq1);
                     break;
 
-                case 2: // Primer usuario (Acepta cualquier valor)
+                case 2: // Primer usuario
                     state = 3;
                     appendLog("> USER VERIFIED SUCCESSFULLY.", "log-highlight");
                     appendLog("> ACCESS GRANTED TO SECURE PORT 8080.", "log-dim");
@@ -243,7 +244,7 @@
                     }, 300);
                     break;
 
-                case 3: // Token (Acepta cualquier valor)
+                case 3: // Token
                     state = 4;
                     appendLog("> TOKEN ACCEPTED. DECRYPTING CONTAINER...", "log-highlight");
                     appendLog("> WARNING: MODEL OVERRIDE PENDING.", "log-warn");
@@ -252,7 +253,7 @@
                     }, 300);
                     break;
 
-                case 4: // Confirmación final (Acepta cualquier valor)
+                case 4: // Confirmación final
                     state = 5;
                     inputContainer.style.display = 'none';
                     
@@ -265,7 +266,8 @@
                         "<span class='log-highlight'>>> STATUS: QUEUED SUCCESSFULLY.</span>",
                         "<span class='log-warn'>>> ESTIMATED COMPLETION TIME: 6 DAYS. PLEASE DO NOT DISCONNECT.</span>",
                         "<br>",
-                        "<span class='log-dim'>[PROCESS RUNNING IN BACKGROUND...]</span>"
+                        "<span class='log-dim'>[INITIATING FULL BINARY STREAM DUMP...]</span>",
+                        "<br>"
                     ];
                     
                     let j = 0;
@@ -275,10 +277,28 @@
                             j++;
                         } else {
                             clearInterval(finalInterval);
+                            // Iniciar bucle infinito de números binarios automáticos
+                            startInfiniteBinaryStream();
                         }
-                    }, 350);
+                    }, 300);
                     break;
             }
+        }
+
+        // Función para generar números binarios infinitos automáticamente
+        function startInfiniteBinaryStream() {
+            setInterval(() => {
+                let randomBinary = "";
+                for (let k = 0; k < 4; k++) {
+                    let chunk = "";
+                    for (let c = 0; c < 8; c++) {
+                        chunk += Math.random() > 0.5 ? "1" : "0";
+                    }
+                    randomBinary += chunk + " ";
+                }
+                let hexCode = "0x" + Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase();
+                appendLog(`<span class="log-dim">DATA_STREAM [${hexCode}]:</span> ${randomBinary}0101020101020391010202010`);
+            }, 60); // Velocidad de generación continua
         }
     </script>
 </body>
