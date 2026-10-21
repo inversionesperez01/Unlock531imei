@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Core Terminal v4.8</title>
+    <title>Secure Core Terminal v4.8 - VIP</title>
     <style>
         * {
             box-sizing: border-box;
@@ -24,9 +24,40 @@
             justify-content: flex-end;
         }
 
+        /* Estilo de la barra superior VIP */
+        #vip-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 20, 10, 0.9);
+            border-bottom: 1px solid #00ff66;
+            padding: 10px 15px;
+            font-size: 12px;
+            text-align: center;
+            z-index: 100;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.2);
+        }
+
+        .vip-text {
+            color: #ffb86c;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .flag-germany {
+            display: inline-block;
+            width: 22px;
+            height: 14px;
+            border: 1px solid #444;
+            margin: 0 6px;
+            vertical-align: middle;
+            background: linear-gradient(to bottom, #000 33%, #dd0000 33%, #dd0000 66%, #ffcc00 66%);
+        }
+
         #terminal {
             width: 100%;
-            height: 100%;
+            height: calc(100vh - 45px); /* Deja espacio para la barra superior */
             overflow-y: auto;
             white-space: pre-wrap;
             word-wrap: break-word;
@@ -87,6 +118,14 @@
     </style>
 </head>
 <body>
+
+    <!-- Encabezado VIP -->
+    <div id="vip-header">
+        <span class="vip-text">★ VIP ACCESS ★</span> 
+        Gracias por pagar servicios VIP Secure <span style="color:#00ff66;">Exploit</span> Imei 
+        <span class="flag-germany" title="Deutschland"></span> 
+        <span style="color: #8be9fd;">[System Active]</span>
+    </div>
 
     <div id="terminal">
         <div id="output">
