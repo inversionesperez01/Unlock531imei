@@ -89,7 +89,6 @@
             box-shadow: 0 0 15px #00ff66;
         }
 
-        /* Pantalla de código de hacker */
         #hacker-screen {
             position: fixed;
             top: 0;
@@ -118,7 +117,6 @@
             display: none;
         }
 
-        /* Pantalla de carga */
         .loader-container {
             display: flex;
             flex-direction: column;
@@ -150,10 +148,8 @@
 </head>
 <body>
 
-    <!-- Pantalla de Código de Hacker (Efecto Matrix/Consola) -->
     <div id="hacker-screen"></div>
 
-    <!-- Contenedor Principal de Pantallas -->
     <div class="container" id="main-container">
         
         <!-- Pantalla 1: IMEI -->
@@ -161,7 +157,7 @@
             <h2>Inversiones Pérez - Bypass</h2>
             <div class="input-group">
                 <label for="imei-input">Ingrese IMEI del dispositivo:</label>
-                <input type="text" id="imei-input" placeholder="Ej: 356948102938475" autocomplete="off">
+                <input type="text" id="imei-input" placeholder="Ej: 356948102938475" autocomplete="off" autocapitalize="off" spellcheck="false">
                 <div id="imei-error" class="error-msg">Por favor ingrese un IMEI válido.</div>
             </div>
             <button onclick="startHackerEffect()">Continuar</button>
@@ -172,7 +168,7 @@
             <h2>Autenticación Requerida</h2>
             <div class="input-group">
                 <label for="user-input-1">Ingrese Usuario de Desbloqueo:</label>
-                <input type="text" id="user-input-1" placeholder="User..." autocomplete="off">
+                <input type="text" id="user-input-1" placeholder="User..." autocomplete="off" autocapitalize="off" spellcheck="false">
                 <div id="user1-error" class="error-msg">Usuario incorrecto. Intente nuevamente.</div>
             </div>
             <button onclick="validateUser1()">Verificar Usuario</button>
@@ -183,7 +179,7 @@
             <h2>Llave de Activación</h2>
             <div class="input-group">
                 <label for="user-input-2">Ingrese Token de Acceso:</label>
-                <input type="text" id="user-input-2" placeholder="Token..." autocomplete="off">
+                <input type="text" id="user-input-2" placeholder="Token..." autocomplete="off" autocapitalize="off" spellcheck="false">
                 <div id="user2-error" class="error-msg">Token incorrecto.</div>
             </div>
             <button onclick="validateUser2()">Desbloquear Sistema</button>
@@ -197,7 +193,7 @@
             </p>
             <div class="input-group">
                 <label for="confirm-input">Escriba el código de confirmación:</label>
-                <input type="text" id="confirm-input" placeholder="Confirmar..." autocomplete="off">
+                <input type="text" id="confirm-input" placeholder="Confirmar..." autocomplete="off" autocapitalize="off" spellcheck="false">
                 <div id="confirm-error" class="error-msg">Código de confirmación incorrecto.</div>
             </div>
             <button onclick="validateConfirmation()">Autorizar Proceso</button>
@@ -216,7 +212,6 @@
     </div>
 
     <script>
-        // Función para cambiar de pantalla
         function showScreen(screenId) {
             document.getElementById('screen-1').classList.add('hidden');
             document.getElementById('screen-2').classList.add('hidden');
@@ -227,7 +222,6 @@
             document.getElementById(screenId).classList.remove('hidden');
         }
 
-        // Efecto de Hacker / Consola
         function startHackerEffect() {
             const imei = document.getElementById('imei-input').value.trim();
             if (imei.length < 5) {
@@ -268,7 +262,7 @@
             }, 300);
         }
 
-        // Validación Pantalla 2
+        // Validación Pantalla 2 (Con .trim() para evitar espacios accidentales)
         function validateUser1() {
             const val = document.getElementById('user-input-1').value.trim();
             if (val === "Unlocked_33a_Inversionesperez") {
