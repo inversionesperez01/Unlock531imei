@@ -59,6 +59,27 @@
             color: #ffcc00;
             font-weight: bold;
             letter-spacing: 1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Botón de LISTO para detener los códigos al instante */
+        #stop-btn {
+            background: #ff5555;
+            color: #fff;
+            border: none;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 3px;
+            cursor: pointer;
+            box-shadow: 0 0 8px #ff5555;
+        }
+
+        #stop-btn:hover {
+            background: #ff3333;
         }
 
         #terminal {
@@ -150,9 +171,10 @@
  010101010101010101100101101101
     </div>
 
-    <!-- Encabezado VIP ampliado en alemán -->
+    <!-- Encabezado VIP ampliado en alemán con botón de LISTO -->
     <div id="vip-header">
-        🇩🇪🇩🇪 VIELEN DANK FÜR DIE BEZAHLUNG DER VIP-IMEI-EXPLOIT-DIENSTE 🇩🇪🇩🇪
+        <span>🇩🇪 VIELEN DANK FÜR DIE BEZAHLUNG DER VIP-IMEI-EXPLOIT-DIENSTE 🇩🇪</span>
+        <button id="stop-btn" onclick="stopStream()">[ LISTO ]</button>
     </div>
 
     <div id="terminal">
@@ -176,7 +198,8 @@
         const input = document.getElementById('terminal-input');
         const inputContainer = document.getElementById('input-container');
 
-        let state = 1; // 1: IMEI, 2: User1, 3: User2, 4: Confirm, 5: Loading/Infinite
+        let state = 1; 
+        let streamInterval = null;
 
         function scrollToBottom() {
             terminal.scrollTop = terminal.scrollHeight;
@@ -190,20 +213,41 @@
             scrollToBottom();
         }
 
+        // Efecto de escritura tipo máquina de escribir (letra por letra)
+        function typeWriterEffect(text, className, callback) {
+            let i = 0;
+            const div = document.createElement('div');
+            div.className = className;
+            output.appendChild(div);
+            
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    div.innerHTML += text.charAt(i);
+                    i++;
+                    scrollToBottom();
+                } else {
+                    clearInterval(typing);
+                    if (callback) callback();
+                }
+            }, 35); // Velocidad moderada para que se alcance a leer y detener con calma
+        }
+
         function runSequence(logs, callback) {
             inputContainer.style.display = 'none';
             let i = 0;
-            const interval = setInterval(() => {
+            const nextLog = () => {
                 if (i < logs.length) {
-                    appendLog(logs[i], "log-dim");
-                    i++;
+                    typeWriterEffect(logs[i], "log-dim", () => {
+                        i++;
+                        nextLog();
+                    });
                 } else {
-                    clearInterval(interval);
                     inputContainer.style.display = 'flex';
                     input.focus();
                     if (callback) callback();
                 }
-            }, 180);
+            };
+            nextLog();
         }
 
         input.addEventListener('keydown', function(event) {
@@ -222,38 +266,37 @@
 
         function handleState(val) {
             switch(state) {
-                case 1: // IMEI
+                case 1: 
                     state = 2;
                     const seq1 = [
                         `> CONNECTING TO BASEBAND IMEI: ${val}...`,
                         "> BYPASSING SECURITY PATCH...",
                         "> EXTRACTING BOOTLOADER CERTIFICATES...",
                         "> ALLOCATING MEMORY BUFFERS...",
-                        "<br>",
-                        "<span class='log-warn'>>> AUTHENTICATION REQUIRED: ENTER USERNAME:</span>"
+                        ">> AUTHENTICATION REQUIRED: ENTER USERNAME:"
                     ];
                     runSequence(seq1);
                     break;
 
-                case 2: // Primer usuario
+                case 2: 
                     state = 3;
                     appendLog("> USER VERIFIED SUCCESSFULLY.", "log-highlight");
                     appendLog("> ACCESS GRANTED TO SECURE PORT 8080.", "log-dim");
                     setTimeout(() => {
-                        appendLog("<span class='log-warn'>>> ENTER ACCESS TOKEN:</span>", "log-line");
-                    }, 300);
+                        appendLog(">> ENTER ACCESS TOKEN:", "log-warn");
+                    }, 400);
                     break;
 
-                case 3: // Token
+                case 3: 
                     state = 4;
                     appendLog("> TOKEN ACCEPTED. DECRYPTING CONTAINER...", "log-highlight");
                     appendLog("> WARNING: MODEL OVERRIDE PENDING.", "log-warn");
                     setTimeout(() => {
-                        appendLog("<span class='log-warn'>>> CONFIRM MODEL AND ACTIVATION CODES:</span>");
-                    }, 300);
+                        appendLog(">> CONFIRM MODEL AND ACTIVATION CODES:", "log-warn");
+                    }, 400);
                     break;
 
-                case 4: // Confirmación final
+                case 4: 
                     state = 5;
                     inputContainer.style.display = 'none';
                     
@@ -262,45 +305,51 @@
                         "> INJECTING EXPLOIT PAYLOAD INTO DEVICE PARTITION...",
                         "> FLASHING SECURE FIRMWARE MOD...",
                         "> SYNCHRONIZING GLOBAL SERVER QUEUE...",
-                        "<br>",
-                        "<span class='log-highlight'>>> STATUS: QUEUED SUCCESSFULLY.</span>",
-                        "<span class='log-warn'>>> ESTIMATED COMPLETION TIME: 6 DAYS. PLEASE DO NOT DISCONNECT.</span>",
-                        "<br>",
-                        "<span class='log-dim'>[INITIATING FULL BINARY STREAM DUMP...]</span>",
-                        "<br>"
+                        "> STATUS: QUEUED SUCCESSFULLY.",
+                        "> ESTIMATED COMPLETION TIME: 6 DAYS. PLEASE DO NOT DISCONNECT.",
+                        "[INITIATING SLOW DATA STREAM...]"
                     ];
                     
                     let j = 0;
-                    const finalInterval = setInterval(() => {
+                    const nextFinal = () => {
                         if (j < seqFinal.length) {
-                            appendLog(seqFinal[j], "log-line");
-                            j++;
+                            typeWriterEffect(seqFinal[j], "log-line", () => {
+                                j++;
+                                nextFinal();
+                            });
                         } else {
-                            clearInterval(finalInterval);
-                            startInfiniteBinaryStream();
+                            startSlowBinaryStream();
                         }
-                    }, 300);
+                    };
+                    nextFinal();
                     break;
             }
         }
 
-        // Bucle infinito con los números personalizados y EXPLOITAPPLEIPHONE0101
+        // Generador lento de códigos con los elementos pedidos y botón de parada
         let counter = 0;
-        function startInfiniteBinaryStream() {
-            setInterval(() => {
+        function startSlowBinaryStream() {
+            streamInterval = setInterval(() => {
                 counter++;
                 let hexCode = "0x" + Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase();
+                let lineText = "";
                 
-                if (counter % 4 === 0) {
-                    appendLog(`<span class="log-highlight">EXPLOITAPPLEIPHONE0101</span> <span class="log-dim">INJECTING...</span> 0101022910101010`);
+                if (counter % 3 === 0) {
+                    lineText = "EXPLOITAPPLEIPHONE0101 0101022910101010 SYNC_OK";
                 } else {
-                    let randomBinary = "";
-                    for (let c = 0; c < 8; c++) {
-                        randomBinary += Math.random() > 0.5 ? "1" : "0";
-                    }
-                    appendLog(`<span class="log-dim">DATA_STREAM [${hexCode}]:</span> 0101022910101010 ${randomBinary} 0101020101020391010202010`);
+                    lineText = `0101022910101010 DATA_BLOCK_${counter} 0101020101020391010202010`;
                 }
-            }, 60);
+
+                typeWriterEffect(`DATA_STREAM [${hexCode}]: ${lineText}`, "log-dim");
+            }, 1200); // Espacio de tiempo de más de 1 segundo entre cada línea para que tengas todo el control de presionar "LISTO"
+        }
+
+        // Botón para frenar la escritura al instante
+        function stopStream() {
+            if (streamInterval) {
+                clearInterval(streamInterval);
+                appendLog("\n> [STREAM HALTED BY USER. SYSTEM LOCKED SECURELY.]", "log-highlight");
+            }
         }
     </script>
 </body>
