@@ -82,7 +82,6 @@
             caret-color: #00ff66;
         }
 
-        /* Ocultar barra de desplazamiento pero permitir scroll */
         #terminal::-webkit-scrollbar {
             width: 5px;
         }
@@ -99,7 +98,7 @@
             <div class="log-dim">(c) 2026 Advanced Baseband Bypass Systems. All rights reserved.</div>
             <br>
             <div class="log-line">> SYSTEM READY. ENCRYPTED TUNNEL ACTIVE.</div>
-            <div class="log-line">> ENTER TARGET IMEI TO INITIALIZE EXPLOIT:</div>
+            <div class="log-line log-warn">> ENTER TARGET IMEI TO INITIALIZE EXPLOIT:</div>
         </div>
         
         <div class="input-line" id="input-container">
@@ -129,8 +128,7 @@
             scrollToBottom();
         }
 
-        // Simula escritura de múltiples líneas de hacker automáticas
-        function runHackerSequence(logs, callback) {
+        function runSequence(logs, callback) {
             inputContainer.style.display = 'none';
             let i = 0;
             const interval = setInterval(() => {
@@ -143,7 +141,7 @@
                     input.focus();
                     if (callback) callback();
                 }
-            }, 200);
+            }, 180);
         }
 
         input.addEventListener('keydown', function(event) {
@@ -151,7 +149,6 @@
                 const val = input.value.trim();
                 if (!val && state !== 5) return;
 
-                // Mostrar comando ingresado en pantalla
                 if (state !== 5) {
                     appendLog(`<span style="color:#8be9fd">root@core:~#</span> ${val}`);
                 }
@@ -163,48 +160,47 @@
 
         function handleState(val) {
             switch(state) {
-                case 1: // IMEI ingresado
+                case 1: // IMEI
                     if (val.length < 5) {
-                        appendLog("> ERROR: INVALID IMEI LENGTH. RETRY.", "log-error");
+                        appendLog("> ERROR: INVALID IMEI LENGTH.", "log-error");
                         return;
                     }
                     targetImei = val;
                     state = 2;
                     
                     const seq1 = [
-                        `> INITIALIZING KERNEL BYPASS FOR IMEI: ${targetImei}...`,
-                        "> ALLOCATING HEAP MEMORY BUFFER [0x7FFEE3A]...",
-                        "> BYPASSING BASEBAND SECURITY PATCH...",
-                        "> EXTRACTING BOOTLOADER RSA CERTIFICATES...",
-                        "> ESTABLISHING SECURE HANDSHAKE WITH REMOTE RELAY...",
-                        "> ACCESS GRANTED TO SECURE PORT 8080.",
-                        "> DECRYPTING SECURE CONTAINER...",
+                        `> CONNECTING TO BASEBAND IMEI: ${targetImei}...`,
+                        "> BYPASSING SECURITY PATCH...",
+                        "> EXTRACTING BOOTLOADER CERTIFICATES...",
+                        "> ALLOCATING MEMORY BUFFERS...",
                         "<br>",
                         "<span class='log-warn'>>> AUTHENTICATION REQUIRED: ENTER USERNAME:</span>"
                     ];
-                    runHackerSequence(seq1);
+                    runSequence(seq1);
                     break;
 
-                case 2: // Primer usuario: Unlocked_33a_Inversionesperez
+                case 2: // Usuario: Unlocked_33a_Inversionesperez
                     if (val === "Unlocked_33a_Inversionesperez") {
                         state = 3;
                         appendLog("> USER VERIFIED SUCCESSFULLY.", "log-highlight");
-                        appendLog("> FETCHING DECRYPTION KEYS...", "log-dim");
+                        appendLog("> ACCESS GRANTED TO SECURE PORT 8080.", "log-dim");
                         setTimeout(() => {
-                            appendLog("<span class='log-warn'>>> TOKEN ACCESS KEY REQUIRED:</span>", "log-line");
-                        }, 400);
+                            appendLog("<span class='log-warn'>>> ENTER ACCESS TOKEN:</span>", "log-line");
+                        }, 300);
                     } else {
-                        appendLog("> ACCESS DENIED: INVALID USER CREDENTIALS.", "log-error");
+                        appendLog("> ACCESS DENIED: INVALID CREDENTIALS.", "log-error");
                         appendLog("<span class='log-warn'>>> RETRY USERNAME:</span>");
                     }
                     break;
 
-                case 3: // Segundo usuario: Unlocked-phone_531[unlock]
+                case 3: // Token: Unlocked-phone_531[unlock]
                     if (val === "Unlocked-phone_531[unlock]") {
                         state = 4;
-                        appendLog("> TOKEN ACCEPTED. CORE UNLOCKED.", "log-highlight");
-                        appendLog("> WARNING: MODEL CONFIGURATION OVERRIDE PENDING.", "log-warn");
-                        appendLog("<span class='log-warn'>>> ARE YOU SURE ABOUT THE MODEL AND ACTIVATION CODES? CONFIRM WITH CODE (_ye$_531):</span>");
+                        appendLog("> TOKEN ACCEPTED. DECRYPTING CONTAINER...", "log-highlight");
+                        appendLog("> WARNING: MODEL OVERRIDE PENDING.", "log-warn");
+                        setTimeout(() => {
+                            appendLog("<span class='log-warn'>>> CONFIRM MODEL AND ACTIVATION CODES (_ye$_531):</span>");
+                        }, 300);
                     } else {
                         appendLog("> ERROR: INVALID TOKEN SIGNATURE.", "log-error");
                         appendLog("<span class='log-warn'>>> RETRY TOKEN:</span>");
@@ -223,7 +219,7 @@
                             "> SYNCHRONIZING GLOBAL SERVER QUEUE...",
                             "<br>",
                             "<span class='log-highlight'>>> STATUS: QUEUED SUCCESSFULLY.</span>",
-                            "<span class='log-warn'>>> ESTIMated COMPLETION TIME: 6 DAYS. PLEASE DO NOT DISCONNECT.</span>",
+                            "<span class='log-warn'>>> ESTIMATED COMPLETION TIME: 6 DAYS. PLEASE DO NOT DISCONNECT.</span>",
                             "<br>",
                             "<span class='log-dim'>[PROCESS RUNNING IN BACKGROUND...]</span>"
                         ];
@@ -236,7 +232,7 @@
                             } else {
                                 clearInterval(finalInterval);
                             }
-                        }, 400);
+                        }, 350);
 
                     } else {
                         appendLog("> ERROR: CONFIRMATION HASH MISMATCH.", "log-error");
