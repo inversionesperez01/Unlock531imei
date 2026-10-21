@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Core Terminal v4.8 - VIP</title>
+    <title>Secure Core Terminal v4.8 - VIP Desktop</title>
     <style>
         * {
             box-sizing: border-box;
@@ -18,63 +18,63 @@
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            padding: 15px;
+            padding: 25px;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             position: relative;
         }
 
-        /* Icono de documento binario estilo hacker centrado */
+        /* Icono de documento binario estilo hacker centrado para PC */
         .binary-file {
             position: absolute;
-            top: 32%;
+            top: 38%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 11px;
+            font-size: 14px;
             line-height: 1.1;
-            color: rgba(0, 255, 102, 0.25);
+            color: rgba(0, 255, 102, 0.2);
             z-index: 0;
             pointer-events: none;
             text-align: center;
             font-weight: bold;
-            letter-spacing: 1px;
-            text-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(0, 255, 102, 0.35);
             white-space: pre;
         }
 
-        /* Encabezado VIP superior con botón discreto */
+        /* Encabezado VIP superior adaptado para escritorio */
         #vip-header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(0, 20, 10, 0.98);
+            background: rgba(0, 15, 8, 0.95);
             border-bottom: 2px solid #00ff66;
-            padding: 12px 10px;
-            font-size: 13px;
+            padding: 14px 20px;
+            font-size: 15px;
             text-align: center;
             z-index: 100;
-            box-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.4);
             color: #ffcc00;
             font-weight: bold;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Botón FERTIG ultra discreto */
+        /* Botón FERTIG discreto en PC */
         #stop-btn {
             position: absolute;
-            right: 15px;
+            right: 25px;
             background: transparent;
             color: #005522;
             border: 1px solid #003311;
-            padding: 2px 6px;
-            font-size: 10px;
+            padding: 4px 10px;
+            font-size: 11px;
             font-family: 'Courier New', Courier, monospace;
-            border-radius: 2px;
+            border-radius: 3px;
             cursor: pointer;
             transition: 0.3s;
         }
@@ -82,24 +82,29 @@
         #stop-btn:hover {
             color: #ff5555;
             border-color: #ff5555;
+            background: rgba(255, 85, 85, 0.05);
         }
 
+        /* Contenedor de la terminal optimizado para pantallas grandes */
         #terminal {
             width: 100%;
-            height: calc(100vh - 60px);
+            max-width: 1200px;
+            margin: 0 auto;
+            height: calc(100vh - 75px);
             overflow-y: auto;
             white-space: pre-wrap;
             word-wrap: break-word;
-            font-size: 13px;
-            line-height: 1.4;
+            font-size: 15px;
+            line-height: 1.5;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             z-index: 1;
+            padding-bottom: 15px;
         }
 
         .log-line {
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             color: #00ff66;
         }
 
@@ -119,13 +124,14 @@
         .input-line {
             display: flex;
             align-items: center;
-            margin-top: 5px;
+            margin-top: 8px;
         }
 
         .prompt-symbol {
             color: #00ff66;
-            margin-right: 8px;
+            margin-right: 10px;
             font-weight: bold;
+            font-size: 15px;
         }
 
         input {
@@ -133,17 +139,18 @@
             border: none;
             color: #00ff66;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 13px;
+            font-size: 15px;
             outline: none;
             width: 100%;
             caret-color: #00ff66;
         }
 
         #terminal::-webkit-scrollbar {
-            width: 5px;
+            width: 6px;
         }
         #terminal::-webkit-scrollbar-thumb {
             background: #003311;
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -151,29 +158,29 @@
 
     <!-- Icono de documento binario estilo hacker centrado -->
     <div class="binary-file">
- 101110101000100010101101010101
- 10              10101.  110101
- 01            110  1010101101
- 00          10101   0111  01
- 10     0001010101101    10101.
- 01    101101001010101101  010.
- 10   110100101010101011  110101
- 10  10101011101010101011001010
- 11  01010001000101010110101010
- 11  11010101110101100101010110
- 10  01000101000100101010100010
- 01  11010111011011001010101101
- 11   01000101010101010100101
- 01    1101010101010101010101
- 01     1101011101010001000101
- 10      10101010110101000101
- 01       01010101101.
- 10         010101.
- 01
- 010101010101010101100101101101
+ 101110101000100010101101010101 101010101011010101000101
+ 10              10101.  110101 010101011010101010101010
+ 01            110  1010101101 101010101011010101000101
+ 00          10101   0111  01 010101011010101010101010
+ 10     0001010101101    10101. 101010101011010101000101
+ 01    101101001010101101  010. 010101011010101010101010
+ 10   110100101010101011  110101 101010101011010101000101
+ 10  10101011101010101011001010 010101011010101010101010
+ 11  01010001000101010110101010 101010101011010101000101
+ 11  11010101110101100101010110 010101011010101010101010
+ 10  01000101000100101010100010 101010101011010101000101
+ 01  11010111011011001010101101 010101011010101010101010
+ 11   01000101010101010100101 101010101011010101000101
+ 01    1101010101010101010101 010101011010101010101010
+ 01     1101011101010001000101 101010101011010101000101
+ 10      10101010110101000101 010101011010101010101010
+ 01       01010101101. 101010101011010101000101
+ 10         010101. 010101011010101010101010
+ 01 101010101011010101000101
+ 010101010101010101100101101101 010101011010101010101010
     </div>
 
-    <!-- Encabezado VIP en alemán con botón FERTIG discreto -->
+    <!-- Encabezado VIP superior con botón FERTIG discreto -->
     <div id="vip-header">
         <span>🇩🇪 VIELEN DANK FÜR DIE BEZAHLUNG DER VIP-IMEI-EXPLOIT-DIENSTE 🇩🇪</span>
         <button id="stop-btn" onclick="stopStream()">FERTIG</button>
@@ -181,8 +188,8 @@
 
     <div id="terminal">
         <div id="output">
-            <div class="log-dim">SECURE CORE KERNEL [Version 4.8.19-ARCH]</div>
-            <div class="log-dim">(c) 2026 Advanced Baseband Bypass Systems. All rights reserved.</div>
+            <div class="log-dim">SECURE CORE KERNEL [Version 4.8.19-ARCH x86_64]</div>
+            <div class="log-dim">(c) 2026 Advanced Baseband Bypass Systems. Desktop Environment. All rights reserved.</div>
             <br>
             <div class="log-line">> SYSTEM READY. ENCRYPTED TUNNEL ACTIVE.</div>
             <div class="log-line log-warn">> ENTER TARGET IMEI TO INITIALIZE EXPLOIT:</div>
@@ -200,7 +207,7 @@
         const input = document.getElementById('terminal-input');
         const inputContainer = document.getElementById('input-container');
 
-        let state = 1; // 1: IMEI, 2: User, 3: Email, 4: Token, 5: Confirm, 6: Loading/Stream
+        let state = 1; 
         let isWriting = false;
 
         function scrollToBottom() {
@@ -234,7 +241,7 @@
                     clearInterval(typing);
                     if (callback) callback();
                 }
-            }, 65);
+            }, 50); // Velocidad fluida para PC
         }
 
         function runSequence(logs, callback) {
@@ -292,7 +299,7 @@
                     }, 400);
                     break;
 
-                case 3: // Correo Electrónico
+                case 3: // Correo
                     state = 4;
                     appendLog(`> EMAIL REGISTERED: ${val}`, "log-highlight");
                     appendLog("> SECURING MAILING TUNNEL...", "log-dim");
@@ -349,7 +356,6 @@
             let hexCode = "0x" + Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase();
             let textLine = "";
             
-            // Mayor variedad y densidad de números y códigos extensos
             if (counter % 3 === 0) {
                 textLine = `EXPLOITAPPLEIPHONE0101 0101022910101010 SYNC_BLOCK_${counter} 0101020101020391010202010`;
             } else if (counter % 2 === 0) {
